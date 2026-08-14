@@ -1,5 +1,5 @@
-import { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
-import { api } from '../services/api';
+import {createContext, type ReactNode, useContext, useEffect, useState} from 'react';
+import {api} from '../services/api';
 
 interface User {
   id: string;
@@ -70,6 +70,5 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 }
 
 export function useAuth() {
-  const context = useContext(AuthContext);
-  return context;
+  return useContext(AuthContext);
 }

@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from 'react';
 import { Link } from 'react-router-dom';
-import { User, Mail, Lock, Tag, UserPlus } from 'lucide-react';
+import { User, Mail, Lock, Tag } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useAuth } from '../../contexts/AuthContext';
 
@@ -39,7 +39,6 @@ export function Register() {
 
   return (
     <div className="relative min-h-screen overflow-hidden">
-      {/* Conteúdo centralizado */}
       <div className="relative flex min-h-screen items-center justify-center px-6 py-10">
         <motion.div 
           initial={{ opacity: 0, y: 30 }}
@@ -47,8 +46,7 @@ export function Register() {
           transition={{ duration: 0.4, ease: "easeOut" }}
           className="flex w-full max-w-md flex-col gap-6"
         >
-          {/* Logo / Branding */}
-          <div className="flex flex-col gap-1">
+          <div className="flex flex-col gap-1 items-center">
             <h1 className="text-3xl font-bold tracking-tight text-white">
               Elite<span className="text-primary">Tickets</span>
             </h1>
@@ -57,8 +55,7 @@ export function Register() {
             </span>
           </div>
 
-          {/* Card do formulário */}
-          <div className="rounded-3xl border border-white/10 bg-bg-card p-8 shadow-[0_24px_60px_-20px_rgba(0,0,0,0.9)]">
+          <div className="rounded-3xl border border-primary bg-bg-card p-8 shadow-[0_24px_60px_-20px_rgba(0,0,0,0.9)]">
             <div className="mb-6">
               <h2 className="text-xl font-semibold tracking-tight text-white">Criar conta</h2>
               <p className="mt-1 text-sm text-muted leading-relaxed">
@@ -142,7 +139,6 @@ export function Register() {
                     <option className="bg-bg-card" value="CLIENTE">Cliente — comprar ingressos</option>
                     <option className="bg-bg-card" value="ORGANIZADOR">Organizador — criar eventos</option>
                   </select>
-                  {/* Seta customizada para o select */}
                   <svg className="pointer-events-none absolute top-1/2 right-3.5 size-4 -translate-y-1/2 text-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <polyline points="6 9 12 15 18 9"></polyline>
                   </svg>
@@ -152,12 +148,9 @@ export function Register() {
               <button
                 type="submit"
                 disabled={loading}
-                className="relative mt-2 flex h-12 w-full items-center overflow-hidden rounded-2xl border border-white/15 bg-neutral-950 text-white transition-colors hover:border-primary/45 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg-main disabled:pointer-events-none disabled:opacity-50"
+                className="relative mt-2 flex h-12 w-full items-center overflow-hidden rounded-2xl border border-white/15 bg-primary text-white transition-colors hover:border-primary/45 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg-main disabled:pointer-events-none disabled:opacity-50"
               >
-                <span className="flex h-full w-12 shrink-0 items-center justify-center rounded-xl bg-primary text-white">
-                  <UserPlus className="size-5" />
-                </span>
-                <span className="flex-1 pr-4 text-center font-heading text-sm font-medium tracking-[0.12em] uppercase">
+                <span className="flex-1 text-center font-heading font-semibold text-sm tracking-[0.12em] uppercase">
                   {loading ? 'Criando conta...' : 'Cadastrar'}
                 </span>
               </button>
@@ -165,7 +158,7 @@ export function Register() {
 
             <p className="mt-6 text-center text-sm text-muted">
               Já possui uma conta?{' '}
-              <Link className="text-white underline underline-offset-4 transition-colors hover:text-primary" to="/login">
+              <Link className="text-white transition-colors hover:text-primary" to="/login">
                 Fazer login
               </Link>
             </p>

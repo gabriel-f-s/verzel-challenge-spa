@@ -4,8 +4,8 @@ import { useAuth } from '../contexts/AuthContext';
 
 import { Login } from '../pages/Login';
 import { Register } from '../pages/Register';
+import { Dashboard } from '../pages/Dashboard';
 
-// Um componente simples para proteger rotas privadas futuramente
 function PrivateRoute({ children }: { children: ReactElement }) {
   const { isAuthenticated, loading } = useAuth();
   
@@ -25,13 +25,10 @@ export function AppRoutes() {
         <Route path="/login" element={isAuthenticated ? <Navigate to="/dashboard" /> : <Login />} />
         <Route path="/register" element={isAuthenticated ? <Navigate to="/dashboard" /> : <Register />} />
 
-        {/* Futuras Rotas Privadas */}
+        {/* Rotas Privadas */}
         <Route path="/dashboard" element={
           <PrivateRoute>
-            <div style={{ padding: '2rem' }}>
-              <h1>Dashboard</h1>
-              <p>Bem-vindo ao sistema de ingressos Verzel!</p>
-            </div>
+            <Dashboard />
           </PrivateRoute>
         } />
 

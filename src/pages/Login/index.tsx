@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from 'react';
 import { Link } from 'react-router-dom';
-import { Mail, Lock, LogIn } from 'lucide-react';
+import { Mail, Lock } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useAuth } from '../../contexts/AuthContext';
 
@@ -36,7 +36,6 @@ export function Login() {
 
   return (
     <div className="relative min-h-screen overflow-hidden">
-      {/* Conteúdo centralizado */}
       <div className="relative flex min-h-screen items-center justify-center px-6 py-10">
         <motion.div 
           initial={{ opacity: 0, y: 30 }}
@@ -44,8 +43,7 @@ export function Login() {
           transition={{ duration: 0.4, ease: "easeOut" }}
           className="flex w-full max-w-md flex-col gap-6"
         >
-          {/* Logo / Branding */}
-          <div className="flex flex-col gap-1">
+          <div className="flex flex-col gap-1 items-center">
             <h1 className="text-3xl font-bold tracking-tight text-white">
               Elite<span className="text-primary">Tickets</span>
             </h1>
@@ -54,8 +52,7 @@ export function Login() {
             </span>
           </div>
 
-          {/* Card do formulário */}
-          <div className="rounded-3xl border border-white/10 bg-bg-card p-8 shadow-[0_24px_60px_-20px_rgba(0,0,0,0.9)]">
+          <div className="rounded-3xl border border-primary bg-bg-card p-8 shadow-[0_24px_60px_-20px_rgba(0,0,0,0.9)]">
             <div className="mb-6">
               <h2 className="text-xl font-semibold tracking-tight text-white">Entrar</h2>
               <p className="mt-1 text-sm text-muted leading-relaxed">
@@ -109,12 +106,9 @@ export function Login() {
               <button
                 type="submit"
                 disabled={loading}
-                className="relative mt-2 flex h-12 w-full items-center overflow-hidden rounded-2xl border border-white/15 bg-neutral-950 text-white transition-colors hover:border-primary/45 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg-main disabled:pointer-events-none disabled:opacity-50"
+                className="bg-primary relative mt-2 flex h-12 w-full items-center overflow-hidden rounded-2xl border border-white/15 text-white transition-colors hover:border-primary/45 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg-main disabled:pointer-events-none disabled:opacity-50"
               >
-                <span className="flex h-full w-12 shrink-0 items-center justify-center rounded-xl bg-primary text-white">
-                  <LogIn className="size-5" />
-                </span>
-                <span className="flex-1 pr-4 text-center font-heading text-sm font-medium tracking-[0.12em] uppercase">
+                <span className="flex-1 text-center font-heading text-sm font-semibold tracking-[0.12em] uppercase">
                   {loading ? 'Entrando...' : 'Entrar'}
                 </span>
               </button>
@@ -122,7 +116,7 @@ export function Login() {
 
             <p className="mt-6 text-center text-sm text-muted">
               Não tem uma conta?{' '}
-              <Link className="text-white underline underline-offset-4 transition-colors hover:text-primary" to="/register">
+              <Link className="text-white transition-colors hover:text-primary" to="/register">
                 Cadastre-se
               </Link>
             </p>
