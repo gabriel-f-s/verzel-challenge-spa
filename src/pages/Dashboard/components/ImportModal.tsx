@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { searchTMDB, type ExternalEvent } from '../../../services/integrations';
 import { importEvent } from '../../../services/events';
 import { ImageWithFallback } from './ImageWithFallback';
+import toast from 'react-hot-toast';
 
 interface ImportModalProps {
   isOpen: boolean;
@@ -97,12 +98,13 @@ export function ImportModal({
         type,
       });
 
+      toast.success('Evento importado com sucesso!');
       onImportSuccess();
       handleClose();
     } catch (err: any) {
-      setError(
-        err.response?.data?.message || 'Erro ao importar evento no servidor.',
-      );
+      const msg = err.response?.data?.message || 'Erro ao importar evento no servidor.';
+      setError(msg);
+      toast.error(msg);
     } finally {
       setSubmitting(false);
     }

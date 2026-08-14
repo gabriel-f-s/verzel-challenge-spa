@@ -5,9 +5,10 @@ interface EventCardProps {
   event: EventData;
   isOrganizer?: boolean;
   onDelete?: (event: EventData) => void;
+  onBuy?: (event: EventData) => void;
 }
 
-export function EventCard({ event, isOrganizer, onDelete }: EventCardProps) {
+export function EventCard({ event, isOrganizer, onDelete, onBuy }: EventCardProps) {
   return (
     <div className="group relative flex flex-col overflow-hidden rounded-md border border-border bg-bg-card shadow-[0_8px_30px_-10px_rgba(0,0,0,0.5)] transition-all hover:border-primary/50">
       <div className="relative aspect-[2/3] w-full overflow-hidden bg-bg-input cursor-pointer">
@@ -123,6 +124,15 @@ export function EventCard({ event, isOrganizer, onDelete }: EventCardProps) {
             <span>R$ {event.price.toFixed(2).replace('.', ',')}</span>
           </div>
         </div>
+
+        {onBuy && (
+          <button
+            onClick={() => onBuy(event)}
+            className="mt-4 w-full rounded-md bg-primary py-2.5 text-sm font-bold tracking-wide text-white transition-all hover:opacity-90 shadow-lg shadow-primary/20"
+          >
+            {event.type === 'SEATED' ? 'Comprar / Reservar' : 'Comprar Ingresso'}
+          </button>
+        )}
       </div>
     </div>
   );

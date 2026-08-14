@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { User, Mail, Lock, Tag } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useAuth } from '../../contexts/AuthContext';
+import toast from 'react-hot-toast';
 
 export function Register() {
   const { signUp } = useAuth();
@@ -27,18 +28,23 @@ export function Register() {
       setLoading(true);
       setError('');
       await signUp({ name, email, password, role });
+      toast.success('Conta criada com sucesso!');
     } catch (err: any) {
-      setError(
-        err.response?.data?.message ||
-        'Ocorreu um erro ao criar a conta.'
-      );
+      const msg = err.response?.data?.message || 'Ocorreu um erro ao criar a conta.';
+      setError(msg);
+      toast.error(msg);
     } finally {
       setLoading(false);
     }
   }
 
   return (
-    <div className="relative min-h-screen overflow-hidden">
+    <motion.div 
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="relative min-h-screen overflow-hidden"
+    >
       <div className="relative flex min-h-screen items-center justify-center px-6 py-10">
         <motion.div 
           initial={{ opacity: 0, y: 30 }}
@@ -165,6 +171,6 @@ export function Register() {
           </div>
         </motion.div>
       </div>
-    </div>
+    </motion.div>
   );
 }
