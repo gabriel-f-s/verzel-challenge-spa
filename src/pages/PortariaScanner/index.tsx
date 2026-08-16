@@ -1,3 +1,5 @@
+ 
+ 
 import { useEffect, useState, useRef } from 'react';
 import { Html5QrcodeScanner } from 'html5-qrcode';
 import { fetchEvents, type EventData } from '../../services/events';
@@ -16,40 +18,6 @@ export function PortariaScanner() {
   const [result, setResult] = useState<ValidationResponse | null>(null);
   
   const scannerRef = useRef<Html5QrcodeScanner | null>(null);
-
-  useEffect(() => {
-    async function load() {
-      const data = await fetchEvents();
-      setEvents(data);
-      if (data.length > 0) setSelectedEventId(data[0].id);
-    }
-    load();
-  }, []);
-
-  useEffect(() => {
-    if (!selectedEventId) return;
-
-    scannerRef.current = new Html5QrcodeScanner(
-      "qr-reader",
-      { fps: 10, qrbox: { width: 250, height: 250 } },
-      false
-    );
-
-    scannerRef.current.render(
-      (decodedText: string) => {
-        handleValidate(decodedText);
-      },
-      (_error: any) => {
-      }
-    );
-
-    return () => {
-      if (scannerRef.current) {
-        scannerRef.current.clear().catch(console.error);
-      }
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedEventId]);
 
   const handleValidate = async (code: string) => {
     if (!selectedEventId || !code) return;
@@ -82,48 +50,52 @@ export function PortariaScanner() {
     }
   };
 
-  const ResultCard = () => {
-    if (!result) return null;
+  useEffect(() => {
+    async function load() {
+      const data = await fetchEvents();
+      setEvents(data);
+      if (data.length > 0) setSelectedEventId(data[0].id);
+    }
+    load();
+  }, []);
 
-    const styles = {
-      VALID: 'bg-green-500/10 border-green-500/30 text-green-500',
-      ALREADY_USED: 'bg-yellow-500/10 border-yellow-500/30 text-yellow-500',
-      WRONG_EVENT: 'bg-orange-500/10 border-orange-500/30 text-orange-500',
-      INVALID: 'bg-red-500/10 border-red-500/30 text-red-500',
-    };
+  useEffect(() => {
+    if (!selectedEventId) {
+      if (scannerRef.current) {
+        scannerRef.current.clear().catch(console.error);
+      }
+      return;
+    }
 
-    const icons = {
-      VALID: <CheckCircle2 className="size-12 mb-2" />,
-      ALREADY_USED: <AlertTriangle className="size-12 mb-2" />,
-      WRONG_EVENT: <Settings2 className="size-12 mb-2" />,
-      INVALID: <XCircle className="size-12 mb-2" />,
-    };
+    if (!scannerRef.current) {
+      scannerRef.current = new Html5QrcodeScanner(
+        "qr-reader",
+        { fps: 10, qrbox: { width: 250, height: 250 } },
+        /* verbose= */ false
+      );
+    }
 
-    return (
-      <div className={`mt-6 rounded-md border p-6 flex flex-col items-center justify-center text-center ${styles[result.status]}`}>
-        {icons[result.status]}
-        <h3 className="text-xl font-bold mb-2">
-          {result.status === 'VALID' ? 'ENTRADA LIBERADA' : 
-           result.status === 'ALREADY_USED' ? 'JÁ UTILIZADO' :
-           result.status === 'WRONG_EVENT' ? 'EVENTO ERRADO' : 'INVÁLIDO'}
-        </h3>
-        <p className="text-sm font-semibold opacity-90">{result.message}</p>
-        
-        {result.ticket?.seatNumber && (
-          <div className="mt-4 px-4 py-2 bg-black/20 rounded-md">
-            <p className="text-xs uppercase tracking-widest opacity-80">Assento</p>
-            <p className="text-2xl font-black">{result.ticket.seatNumber}</p>
-          </div>
-        )}
-        
-        <button 
-          onClick={() => setResult(null)} 
-          className="mt-6 px-6 py-2 bg-black/20 hover:bg-black/40 transition-colors rounded-md text-sm font-bold"
-        >
-          Nova Leitura
-        </button>
-      </div>
+    scannerRef.current.render(
+      (decodedText: string) => {
+        handleValidate(decodedText);
+      },
+      (_error: any) => {
+      }
     );
+
+    return () => {
+      if (scannerRef.current) {
+        scannerRef.current.clear().catch(console.error);
+      }
+    };
+     
+  }, [selectedEventId]);
+
+  const styles = {
+    VALID: 'bg-green-500/10 border-green-500/30 text-green-500',
+    ALREADY_USED: 'bg-yellow-500/10 border-yellow-500/30 text-yellow-500',
+    WRONG_EVENT: 'bg-orange-500/10 border-orange-500/30 text-orange-500',
+    INVALID: 'bg-red-500/10 border-red-500/30 text-red-500',
   };
 
   return (
@@ -213,7 +185,35 @@ export function PortariaScanner() {
               </div>
             </div>
 
-            <ResultCard />
+            {result && (
+              <div className={`mt-6 rounded-md border p-6 flex flex-col items-center justify-center text-center ${styles[result.status]}`}>
+                {result.status === 'VALID' && <CheckCircle2 className="size-12 mb-2" />}
+                {result.status === 'ALREADY_USED' && <AlertTriangle className="size-12 mb-2" />}
+                {result.status === 'WRONG_EVENT' && <Settings2 className="size-12 mb-2" />}
+                {result.status === 'INVALID' && <XCircle className="size-12 mb-2" />}
+                
+                <h3 className="text-xl font-bold mb-2">
+                  {result.status === 'VALID' ? 'ENTRADA LIBERADA' : 
+                   result.status === 'ALREADY_USED' ? 'JÁ UTILIZADO' :
+                   result.status === 'WRONG_EVENT' ? 'EVENTO ERRADO' : 'INVÁLIDO'}
+                </h3>
+                <p className="text-sm font-semibold opacity-90">{result.message}</p>
+                
+                {result.ticket?.seatNumber && (
+                  <div className="mt-4 px-4 py-2 bg-black/20 rounded-md">
+                    <p className="text-xs uppercase tracking-widest opacity-80">Assento</p>
+                    <p className="text-2xl font-black">{result.ticket.seatNumber}</p>
+                  </div>
+                )}
+                
+                <button 
+                  onClick={() => setResult(null)} 
+                  className="mt-6 px-6 py-2 bg-black/20 hover:bg-black/40 transition-colors rounded-md text-sm font-bold"
+                >
+                  Nova Leitura
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </main>

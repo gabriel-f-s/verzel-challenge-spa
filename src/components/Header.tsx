@@ -2,6 +2,19 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { ScanFace } from 'lucide-react';
 
+const NavLink = ({ to, label, isActive }: { to: string; label: string; isActive: boolean }) => (
+  <Link
+    to={to}
+    className={`transition-colors font-semibold text-sm ${
+      isActive
+        ? 'text-white hover:text-primary'
+        : 'text-muted hover:text-white'
+    }`}
+  >
+    {label}
+  </Link>
+);
+
 export function Header() {
   const { user, signOut } = useAuth();
   const location = useLocation();
@@ -15,19 +28,6 @@ export function Header() {
         : 'Cliente';
 
   const isActive = (path: string) => location.pathname === path;
-
-  const NavLink = ({ to, label }: { to: string; label: string }) => (
-    <Link
-      to={to}
-      className={`transition-colors font-semibold text-sm ${
-        isActive(to)
-          ? 'text-white hover:text-primary'
-          : 'text-muted hover:text-white'
-      }`}
-    >
-      {label}
-    </Link>
-  );
 
   return (
     <header className="sticky top-0 z-40 border-b border-primary bg-bg-card shadow-md">
@@ -43,14 +43,14 @@ export function Header() {
           <nav className="hidden md:flex items-center gap-4 uppercase">
             {user?.role === 'CLIENTE' && (
               <>
-                <NavLink to="/dashboard" label="Catálogo" />
-                <NavLink to="/my-tickets" label="Meus Ingressos" />
+                <NavLink to="/dashboard" label="Catálogo" isActive={isActive('/dashboard')} />
+                <NavLink to="/my-tickets" label="Meus Ingressos" isActive={isActive('/my-tickets')} />
               </>
             )}
             {user?.role === 'PORTARIA' && (
               <>
-                <NavLink to="/dashboard" label="Eventos do Dia" />
-                <NavLink to="/scanner" label="Validador" />
+                <NavLink to="/dashboard" label="Eventos do Dia" isActive={isActive('/dashboard')} />
+                <NavLink to="/scanner" label="Validador" isActive={isActive('/scanner')} />
               </>
             )}
           </nav>

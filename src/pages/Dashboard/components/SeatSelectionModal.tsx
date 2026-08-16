@@ -1,3 +1,6 @@
+ 
+ 
+ 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, CheckCircle2, AlertCircle } from 'lucide-react';
@@ -26,15 +29,6 @@ export function SeatSelectionModal({ isOpen, onClose, event }: SeatSelectionModa
 
   const isSeated = event.type === 'SEATED';
 
-  useEffect(() => {
-    if (isOpen && isSeated) {
-      loadOccupiedSeats();
-    } else {
-      setLoading(false);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isOpen, isSeated, event.id]);
-
   async function loadOccupiedSeats() {
     try {
       setLoading(true);
@@ -47,6 +41,15 @@ export function SeatSelectionModal({ isOpen, onClose, event }: SeatSelectionModa
       setLoading(false);
     }
   }
+
+  useEffect(() => {
+    if (isOpen && isSeated) {
+      loadOccupiedSeats();
+    } else {
+      setLoading(false);
+    }
+     
+  }, [isOpen, isSeated, event.id]);
 
   async function handlePurchase(simulateSuccess: boolean) {
     if (isSeated && selectedSeats.length === 0) {
